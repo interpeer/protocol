@@ -96,6 +96,7 @@ class Protocol():
         self.bits_per_line=32                  # Number of bits per line
         self.do_print_top_tens=True            # True: print top numbers for bit tens
         self.do_print_top_units=True           # True: print top numbers for bit units
+        self.do_left_to_right_print=False       # True: print field from left to right dirction
         self.field_list=[]                     # Header fields to be printed out
         self.parse_spec(spec)                  # Parse the received spec and populate self.field_list
 
@@ -186,13 +187,23 @@ class Protocol():
         if self.do_print_top_tens is True:
             for i in range(0, self.bits_per_line):
                 if str(i)[-1:]=="0":
-                    lines[0]+=" %s" % str(i)[0]
+                    if self.do_left_to_right_print:
+                        lines[0]+=" %s" % str(i)[0]
+                    else:
+                        lines[0]=" %s" % str(i)[0]+lines[0]
                 else:
-                    lines[0]+="  "
+                    if self.do_left_to_right_print:
+                        lines[0]+="  "
+                    else:
+                        lines[0]="  "+lines[0]
             lines[0]+="\n"
         if self.do_print_top_units is True:
             for i in range(0, self.bits_per_line):
-                lines[1]+=" %s" % str(i)[-1:]
+                if self.do_left_to_right_print:
+                    lines[1]+=" %s" % str(i)[-1:]
+                else:
+                    lines[1]=" %s" % str(i)[-1:]+lines[1]
+
             #lines[1]+="\n"
         result = "".join(lines)
         return  result if len(result)>0 else None
@@ -210,10 +221,17 @@ class Protocol():
         if width<=0:
             return ""
         else:
-            a="%s" % self.hdr_char_start
-            b=(self.hdr_char_fill_even+self.hdr_char_fill_odd)*(width-1)
-            c="%s%s" % (self.hdr_char_fill_even, self.hdr_char_end)
-            return a+b+c
+            if self.do_left_to_right_print:
+                a="%s" % self.hdr_char_start
+                b=(self.hdr_char_fill_even+self.hdr_char_fill_odd)*(width-1)
+                c="%s%s" % (self.hdr_char_fill_even, self.hdr_char_end)
+                return a + b + c
+            else:
+                d="  "*(self.bits_per_line-width)
+                a="%s" % self.hdr_char_start
+                b=(self.hdr_char_fill_odd+self.hdr_char_fill_even)*(width-1)
+                c="%s%s" % (self.hdr_char_end,self.hdr_char_fill_even, )
+                return d+c+b+a
 
 
     def _get_separator(self, line_end=""):
@@ -336,7 +354,10 @@ class Protocol():
                     current_line+=self._get_separator()
 
                 # Add the whole field
-                current_line+=str.center(field_text, (field_len*2)-1)
+                if self.do_left_to_right_print:
+                    current_line+=str.center(field_text, (field_len*2)-1)
+                else:
+                    current_line=str.center(field_text, (field_len*2)-1)+current_line
 
                 # Update counters
                 bits_in_line+=field_len
@@ -344,7 +365,10 @@ class Protocol():
 
                 # If this is the last character in the line, store the line
                 if bits_in_line==self.bits_per_line:
-                    current_line+=self._get_separator()
+                    if self.do_left_to_right_print:
+                        current_line+=self._get_separator()
+                    else:
+                        current_line=self._get_separator()+current_line
                     lines.append(current_line)
                     current_line=""
                     bits_in_line=0
@@ -360,7 +384,10 @@ class Protocol():
                         if proto_fields[p+1]['len'] > self.bits_per_line - field_len:
 
                             # Print some +-+-+ to cover the previous field
-                            line_left=self._get_horizontal(self.bits_per_line - field_len)
+                            if self.do_left_to_right_print:
+                                line_left=self._get_horizontal(self.bits_per_line - field_len)
+                            else:
+                                line_left=self._get_horizontal(self.bits_per_line - field_len)[field_len*2:]
                             if len(line_left)==0:
                                 line_left=self.hdr_char_start
 
@@ -377,9 +404,14 @@ class Protocol():
                             # just print whitespace to cover as much as we can
                             else:
                                 line_center=" "* ((2*((proto_fields[p+1]['len']-(self.bits_per_line-field_len))))-1)
-                                line_right=self._get_horizontal(self.bits_per_line-proto_fields[p+1]['len'])
-
-                            lines.append(line_left+line_center+line_right)
+                                if self.do_left_to_right_print:
+                                    line_right=self._get_horizontal(self.bits_per_line-proto_fields[p+1]['len'])
+                                else:
+                                    line_right=self._get_horizontal(self.bits_per_line-proto_fields[p+1]['len'])[( proto_fields[p+1]['len'])*2:]
+                            if self.do_left_to_right_print==True:
+                                lines.append(line_left+line_center+line_right)
+                            else:
+                                lines.append(line_right+line_center+line_left)
                         else:
                             lines.append(self._get_horizontal())
                     else:
@@ -389,12 +421,19 @@ class Protocol():
                 # If this is not the last character of the line but we have no
                 # more fields to print, wrap up
                 elif fields_done==len(proto_fields):
-                    current_line+=self._get_separator()
-                    lines.append(current_line)
+                    if self.do_left_to_right_print:
+                        current_line+=self._get_separator()
+                        lines.append(current_line)
+                    else:
+                        current_line=self._get_separator()+current_line
+                        lines.append(" "*((self.bits_per_line-bits_in_line)*2)+current_line)
                     lines.append(self._get_horizontal(bits_in_line))
                 else:
                     # Add the separator character
-                    current_line+=self.hdr_char_sep
+                    if self.do_left_to_right_print:
+                        current_line+=self.hdr_char_sep
+                    else:
+                        current_line=self.hdr_char_sep+current_line
 
             # We don't have enough space for the field on this line.
             else:
@@ -462,6 +501,7 @@ class Main():
         self.hdr_char_fill_odd=None         # Fill character for border odd positions
         self.hdr_char_fill_even=None        # Fill character for border even positions
         self.hdr_char_sep=None              # Field separator character
+        self.do_left_to_right_print=True    # Filed Print From Left To Right
 
 
     def display_help(self):
@@ -480,6 +520,7 @@ class Main():
         print("OPTIONS:")
         print(" -b, --bits <n>      : Number of bits per line")
         print(" -f, --file          : Read specs from a text file")
+        print(" -lsb                : Print Field From Lsb to Msb")
         print(" -h, --help          : Displays this help information")
         print(" -n, --no-numbers    : Do not print bit numbers on top of the header")
         print(" -V, --version       : Displays current version")
@@ -614,6 +655,9 @@ class Main():
                     elif argv[i]=="--sepchar":
                         self.hdr_char_sep=argv[i+1]
 
+                # print field from left to right
+                elif argv[i]=="-lsb":
+                        self.do_left_to_right_print=False
                 # Display help
                 elif argv[i]=="-h" or argv[i]=="--help":
                     self.display_help()
@@ -715,6 +759,7 @@ class Main():
                 self.protocols[i].hdr_char_fill_odd=self.hdr_char_fill_odd
             if self.hdr_char_sep is not None:
                 self.protocols[i].hdr_char_sep=self.hdr_char_sep
+            self.protocols[i].do_left_to_right_print=self.do_left_to_right_print
 
             print(self.protocols[i])
             if len(self.protocols)>1 and i!=len(self.protocols)-1:
