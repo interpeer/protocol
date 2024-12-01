@@ -220,6 +220,7 @@
     bits=<n>       : Number of bits per line. By default it's 32, same as IETF.
                      This is useful for protocols that don't align perfectly to
                      32-bit words, like Ethernet.
+    placeholder=<n> : The Number of placeholder unit per bit(default=1)
     numbers=<Y/N>  : Instructs protocol to print or avoid printing the bit
                      counts on top of the header.
     evenchar=<c>   : Instructs protocol to use the supplied character, instead
