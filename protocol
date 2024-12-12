@@ -338,7 +338,6 @@ class Protocol():
             field_text= field['text']
             field_len=  field['len']
             field_mf =  field['MF'] is True  # Field has more fragments
-
             # If the field text is too long, we truncate it, and add a dot
             # at the end.
             if len(field_text) > (field_len*2*self.ph_num_per_bit)-1:
@@ -353,7 +352,6 @@ class Protocol():
                 # starting character
                 if bits_in_line==0:
                     current_line+=self._get_separator()
-
                 # Add the whole field
                 if self.do_left_to_right_print:
                     current_line+=str.center(field_text, (field_len*2*self.ph_num_per_bit)-1)
@@ -445,7 +443,7 @@ class Protocol():
                     if field_len%self.bits_per_line==0:
                         # Compute how many lines in total we need to print for this
                         # big field.
-                        lines_to_print = int(((field_len/self.bits_per_line)*2*self.ph_num_per_bit)-1)
+                        lines_to_print = int(((field_len/self.bits_per_line)*2)-1)
                         # We print the field text in the central line
                         central_line=int(lines_to_print/2)
                         # Print all those lines
@@ -470,6 +468,8 @@ class Protocol():
                             # If we just added the last line, add a horizontal separator
                             if i==lines_to_print-1:
                                 lines.append(self._get_horizontal())
+                                fields_done+=1
+                        
 
                 # Case 2: We are not at the beginning of the line and we need
                 # to print something that does not fit in the current line
