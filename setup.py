@@ -55,13 +55,22 @@
 #                                                                              #
 ################################################################################
 
-from distutils.core import setup, Extension
-setup(name='protocol',
-      version='0.1',
-      entry_points = {
+from setuptools import setup, find_packages
+import os
+
+from protocol.constants import APPLICATION_VERSION
+
+setup(
+    name='protocol',
+    version=APPLICATION_VERSION,
+    url='https://github.com/interpeer/protocol',
+    author='Jens Finkhaeuser',
+    author_email='jens@finkhaeuser.de',
+    description='A fork of https://github.com/luismartingarcia',
+    packages=find_packages(),
+    entry_points = {
         'console_scripts': [
-            'protocol = protocol:main',
+            'protocol = protocol:main.main',
         ],
-      },
-      packages=[],
-      )
+    },
+)

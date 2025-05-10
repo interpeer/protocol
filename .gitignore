@@ -1,0 +1,7 @@
+# Python related
+/protocol.egg-info/
+__pycache__/
+build/
+
+# Editor files
+.*.sw*
