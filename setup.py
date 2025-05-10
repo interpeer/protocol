@@ -63,7 +63,7 @@ from protocol_graph.constants import APPLICATION_VERSION
 setup(
     name='protocol_graph',
     version=APPLICATION_VERSION,
-    url='https://github.com/interpeer/protocol-graph',
+    url='https://github.com/interpeer/protocol_graph',
     author='Jens Finkhaeuser',
     author_email='jens@finkhaeuser.de',
     description='A fork of https://github.com/luismartingarcia',
