@@ -60,8 +60,8 @@ import sys
 from datetime import date
 
 # INTERNAL IMPORTS
-from constants import *
-import specs
+from protocol.constants import *
+from protocol import specs
 
 
 # CLASS DEFINITIONS
@@ -97,7 +97,7 @@ class Protocol():
         self.ph_num_per_bit= 1                 # Placeholder Num Per Bits
         self.do_print_top_tens=True            # True: print top numbers for bit tens
         self.do_print_top_units=True           # True: print top numbers for bit units
-        self.do_left_to_right_print=False       # True: print field from left to right dirction
+        self.do_left_to_right_print=True       # True: print field from left to right dirction
         self.field_list=[]                     # Header fields to be printed out
         self.parse_spec(spec)                  # Parse the received spec and populate self.field_list
 
