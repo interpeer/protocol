@@ -53,12 +53,10 @@
 ################################################################################
 
 # STANDARD LIBRARY IMPORTS
-import imp
 import unittest
 
-# IMPORT PROTOCOL (need to use the imp library since "protocol" does not 
-# have a .py extension
-protocol = imp.load_source("protocol", "protocol")
+# IMPORT PROTOCOL
+import protocol
 
 # List of test cases. It contains tuples of the form (protocol_spec, expected_output)
 validcases=[
@@ -291,7 +289,7 @@ class ProtocolTests(unittest.TestCase):
         for i in range(0, len(validcases)):
             print("Testing Valid Spec '%s'" % validcases[i][0])
             p = protocol.Protocol(validcases[i][0])
-            self.assertEqual(str(p), validcases[i][1])
+            self.assertEqual(validcases[i][1], str(p))
 
     def test_invalid_specs(self):
         """
