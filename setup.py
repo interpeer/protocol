@@ -58,6 +58,10 @@
 from distutils.core import setup, Extension
 setup(name='protocol',
       version='0.1',
-      scripts=['protocol', 'constants.py', 'specs.py'],
+      entry_points = {
+        'console_scripts': [
+            'protocol = protocol:main',
+        ],
+      },
       packages=[],
       )
