@@ -60,8 +60,8 @@ import sys
 from datetime import date
 
 # INTERNAL IMPORTS
-from protocol.constants import *
-from protocol import specs
+from protocol_graph.constants import *
+from protocol_graph import specs
 
 
 # CLASS DEFINITIONS

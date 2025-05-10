@@ -56,7 +56,7 @@
 import unittest
 
 # IMPORT PROTOCOL
-import protocol
+import protocol_graph as protocol
 
 # List of test cases. It contains tuples of the form (protocol_spec, expected_output)
 validcases=[

@@ -58,10 +58,10 @@
 from setuptools import setup, find_packages
 import os
 
-from protocol.constants import APPLICATION_VERSION
+from protocol_graph.constants import APPLICATION_VERSION
 
 setup(
-    name='protocol',
+    name='protocol_graph',
     version=APPLICATION_VERSION,
     url='https://github.com/interpeer/protocol',
     author='Jens Finkhaeuser',
@@ -70,7 +70,7 @@ setup(
     packages=find_packages(),
     entry_points = {
         'console_scripts': [
-            'protocol = protocol:main.main',
+            'protocol = protocol_graph:main.main',
         ],
     },
 )
