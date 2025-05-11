@@ -161,6 +161,7 @@ class Main():
         Parses command-line arguments and stores any relevant information
         internally
         """
+        import sys
 
         # Store a reference to command line args for later use.
         if is_config_file==False:
@@ -318,6 +319,7 @@ class Main():
         This is Protocol's 'core' method: parses command line argument and prints
         any necessary protocol to standard output
         """
+        import sys
 
         # Parse command-line arguments
         code, err = self.parse_cmd_line_args(sys.argv)
