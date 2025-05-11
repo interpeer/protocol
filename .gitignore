@@ -2,6 +2,7 @@
 /protocol_graph.egg-info/
 __pycache__/
 build/
+poetry.lock
 
 # Editor files
 .*.sw*

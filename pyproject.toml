@@ -1,0 +1,56 @@
+[project]
+name = "protocol_graph"
+version = "0.1.0"
+requires-python = "~= 3.9"
+dynamic = [ "version", "classifiers" ]
+description = "A fork of https://github.com/luismartingarcia"
+authors = [
+    { name = "Luis MartinGarcia", email = "luis.mgarc@gmail.com" },
+    { name = "Jens Finkhaeuser", email = "jens@finkhaeuser.de" },
+]
+maintainers = [
+    { name = "Jens Finkhaeuser", email = "jens@finkhaeuser.de" },
+]
+license = "GPLv3"
+readme = "README.txt"
+keywords = [ 'protocol', 'headers', 'ascii' ]
+
+[project.urls]
+homepage = "https://github.com/interpeer/protocol_graph"
+repository = "https://github.com/interpeer/protocol_graph"
+"Bug Tracker" = "https://github.com/interpeer/protocol_graph/issues"
+# "Packages" = ""
+
+[project.scripts]
+protocol = 'protocol_graph.main:main'
+
+[tool.poetry]
+requires-poetry = "~= 2.0"
+version = "0.1.0"
+packages = [
+    { include = "protocol_graph" },
+]
+
+[tool.poetry.dependencies]
+python = "~= 3.9"
+poetry-plugin-export = "~= 1.9"
+
+[tool.poetry.group.dev.dependencies]
+pylint = ">= 0"
+pylint-pytest = ">= 0"
+
+[tool.pylint.main]
+extension-pkg-allow-list = ["lxml"]
+source-roots = ["protocol"]
+
+[tool.pylint."messages control"]
+disable = [
+  "import-outside-toplevel",
+  "too-many-return-statements",
+  "multiple-imports",
+  "no-else-return",
+]
+
+[build-system]
+requires = [ "poetry-core" ]
+build-backend = "poetry.core.masonry.api"
