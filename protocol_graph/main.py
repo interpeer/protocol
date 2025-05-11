@@ -55,7 +55,9 @@
 #                                                                              #
 ################################################################################
 
-
+# INTERNAL IMPORTS
+from protocol_graph.exceptions import *
+from protocol_graph import Protocol
 
 class Main():
     """

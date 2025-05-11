@@ -56,24 +56,12 @@
 ################################################################################
 
 # STANDARD LIBRARY IMPORTS
-import sys
 from datetime import date
 
 # INTERNAL IMPORTS
 from protocol_graph.constants import *
+from protocol_graph.exceptions import *
 from protocol_graph import specs
-
-
-# CLASS DEFINITIONS
-class ProtocolException(Exception):
-    """
-    This class represents exceptions raised by the Protocol class
-    """
-    def __init__(self, errmsg):
-        self.errmsg=errmsg
-
-    def __str__(self):
-        return str(self.errmsg)
 
 
 class Protocol():
