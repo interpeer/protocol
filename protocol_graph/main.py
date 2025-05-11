@@ -56,6 +56,7 @@
 ################################################################################
 
 # INTERNAL IMPORTS
+from protocol_graph.constants import *
 from protocol_graph.exceptions import *
 from protocol_graph import Protocol
 
